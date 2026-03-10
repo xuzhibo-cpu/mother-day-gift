@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>妇女节快乐 - 梁丽女士</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #FBF6F0;
+            --paper: #F5EDE4;
+            --warm-gray: #5C5346;
+            --accent: #B8956B;
+            --accent-soft: #D4B896;
+            --poem-accent: #8B7355;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Serif SC', 'Cormorant Garamond', serif;
+            background: var(--cream);
+            min-height: 100vh;
+            color: var(--warm-gray);
+            line-height: 1.7;
+        }
+        
+        /*  modern mesh gradient background */
+        .bg-mesh {
+            position: fixed;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 120% 80% at 20% 20%, rgba(212, 184, 150, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse 100% 120% at 80% 80%, rgba(184, 149, 107, 0.2) 0%, transparent 50%),
+                radial-gradient(ellipse 80% 100% at 50% 50%, rgba(210, 180, 140, 0.15) 0%, transparent 60%),
+                linear-gradient(180deg, #FDF8F3 0%, #F5EDE4 50%, #F0E6DC 100%);
+            animation: meshPulse 15s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        @keyframes meshPulse {
+            0%, 100% { opacity: 1; filter: saturate(1); }
+            50% { opacity: 0.96; filter: saturate(1.08); }
+        }
+        
+        /*  modern floating orbs */
+        .bg-particles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .bg-particles span {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(212, 184, 150, 0.4), rgba(184, 149, 107, 0.15));
+            filter: blur(1px);
+            animation: orbFloat 25s ease-in-out infinite;
+        }
+        
+        .bg-particles span:nth-child(1) { left: 5%; top: 15%; width: 120px; height: 120px; animation-delay: 0s; animation-duration: 22s; }
+        .bg-particles span:nth-child(2) { left: 70%; top: 70%; width: 180px; height: 180px; animation-delay: -5s; animation-duration: 28s; opacity: 0.8; }
+        .bg-particles span:nth-child(3) { left: 40%; top: 5%; width: 100px; height: 100px; animation-delay: -10s; animation-duration: 20s; }
+        .bg-particles span:nth-child(4) { left: 85%; top: 30%; width: 80px; height: 80px; animation-delay: -3s; animation-duration: 26s; opacity: 0.7; }
+        .bg-particles span:nth-child(5) { left: 15%; top: 60%; width: 150px; height: 150px; animation-delay: -8s; animation-duration: 24s; opacity: 0.6; }
+        .bg-particles span:nth-child(6) { left: 60%; top: 85%; width: 90px; height: 90px; animation-delay: -12s; animation-duration: 20s; }
+        
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -40px) scale(1.1); }
+            66% { transform: translate(-20px, 25px) scale(0.95); }
+        }
+        
+        /*  WebGL canvas layer */
+        #webgl-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 1;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+        
+        .card {
+            max-width: 560px;
+            width: 100%;
+            background: rgba(255, 252, 248, 0.9);
+            border: 1px solid rgba(184, 149, 107, 0.2);
+            border-radius: 2px;
+            padding: 3.5rem 2.5rem;
+            box-shadow: 0 2px 24px rgba(92, 83, 70, 0.06);
+            position: relative;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2rem;
+            right: 2rem;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+            opacity: 0.6;
+        }
+        
+        .title-container {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 0.75rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.2s forwards;
+        }
+        
+        .name {
+            font-family: 'Noto Serif SC', serif;
+            font-size: clamp(2.2rem, 6vw, 3.2rem);
+            font-weight: 600;
+            color: var(--warm-gray);
+            letter-spacing: 0.15em;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.4s forwards;
+        }
+        
+        .poem {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1.15rem;
+            text-align: center;
+            color: var(--warm-gray);
+            margin: 2rem 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.6s forwards;
+        }
+        
+        .poem .highlight {
+            color: var(--poem-accent);
+            font-weight: 600;
+        }
+        
+        .poem .attribution {
+            font-size: 0.95rem;
+            font-style: italic;
+            color: var(--accent);
+            margin-top: 1rem;
+        }
+        
+        .message {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 1rem;
+            color: var(--warm-gray);
+            margin: 2rem 0 1.5rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 0.8s forwards;
+        }
+        
+        .signature {
+            text-align: right;
+            font-size: 0.95rem;
+            color: var(--accent);
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(184, 149, 107, 0.2);
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        /*  minimal floral accent - clickable flowers */
+        .floral {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2.5rem;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.2s forwards;
+        }
+        
+        .floral .flower {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        
+        .floral .flower:hover {
+            transform: scale(1.15);
+            opacity: 1;
+        }
+        
+        .floral .flower svg {
+            width: 36px;
+            height: 36px;
+            stroke: var(--accent-soft);
+            fill: none;
+            stroke-width: 1.2;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+        
+        .floral .flower:hover svg {
+            opacity: 1;
+            stroke: var(--accent);
+        }
+        
+        /* 妈妈辛苦了 toast */
+        .toast-msg {
+            position: fixed;
+            background: rgba(92, 83, 70, 0.92);
+            color: #FDF8F3;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            z-index: 10000;
+            pointer-events: none;
+            animation: toastIn 0.4s ease forwards;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+        
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(-10px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        @media (max-width: 600px) {
+            .card {
+                padding: 2.5rem 1.5rem;
+            }
+            
+            .name {
+                letter-spacing: 0.08em;
+            }
+            
+            .poem {
+                font-size: 1.05rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="webgl-canvas" aria-hidden="true"></canvas>
+    <div class="bg-mesh" aria-hidden="true"></div>
+    <div class="bg-particles" aria-hidden="true">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+    </div>
+    <div class="container">
+        <div class="card">
+            <div class="title-container">
+                <div class="label">妇女节快乐</div>
+                <div class="name">梁丽</div>
+            </div>
+            
+            <div class="poem">
+                哺雏<span class="highlight">梁</span>燕归，<br>
+                禾沐<span class="highlight">丽</span>春晖。<br>
+                若道<span class="highlight">恩</span>深重，<br>
+                应知<span class="highlight">话</span>与谁。<br>
+                <span class="attribution">——《感至恩》</span>
+            </div>
+            
+            <div class="message">
+                亲爱的妈妈梁丽，今天是属于您的节日。感谢您一直以来的付出和关爱，
+                您的爱是我生命中最温暖的阳光。愿您永远年轻美丽，健康快乐！
+                您是我心中最棒的妈妈，我爱您！
+            </div>
+            
+            <div class="signature">
+                爱您的儿子 续智博<br>
+                2026年妇女节
+            </div>
+            
+            <div class="floral">
+                <div class="flower" title="点击试试">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="2"/>
+                        <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/>
+                    </svg>
+                </div>
+                <div class="flower" title="点击试试">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"/>
+                    </svg>
+                </div>
+                <div class="flower" title="点击试试">
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="2"/>
+                        <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+    <script>
+        (function() {
+            var scene, camera, renderer, particles;
+            
+            function initWebGL() {
+                var canvas = document.getElementById('webgl-canvas');
+                scene = new THREE.Scene();
+                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                camera.position.z = 5;
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                
+                var geometry = new THREE.BufferGeometry();
+                var count = 400;
+                var positions = new Float32Array(count * 3);
+                var colors = new Float32Array(count * 3);
+                var c1 = new THREE.Color(0xd4b896);
+                var c2 = new THREE.Color(0xb8956b);
+                
+                for (var i = 0; i < count * 3; i += 3) {
+                    positions[i] = (Math.random() - 0.5) * 12;
+                    positions[i + 1] = (Math.random() - 0.5) * 12;
+                    positions[i + 2] = (Math.random() - 0.5) * 8;
+                    var t = Math.random();
+                    var c = c1.clone().lerp(c2, t);
+                    colors[i] = c.r;
+                    colors[i + 1] = c.g;
+                    colors[i + 2] = c.b;
+                }
+                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+                
+                var material = new THREE.PointsMaterial({
+                    size: 0.04,
+                    vertexColors: true,
+                    transparent: true,
+                    opacity: 0.5,
+                    blending: THREE.AdditiveBlending,
+                    depthWrite: false
+                });
+                particles = new THREE.Points(geometry, material);
+                scene.add(particles);
+                
+                function animate() {
+                    requestAnimationFrame(animate);
+                    if (particles) {
+                        particles.rotation.y += 0.0008;
+                        particles.rotation.x += 0.0002;
+                    }
+                    renderer.render(scene, camera);
+                }
+                animate();
+                
+                window.addEventListener('resize', function() {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+            }
+            
+            function showToast(x, y, text) {
+                var el = document.createElement('div');
+                el.className = 'toast-msg';
+                el.textContent = text || '妈妈辛苦了';
+                document.body.appendChild(el);
+                var rect = el.getBoundingClientRect();
+                var left = Math.max(16, Math.min(x - rect.width / 2, window.innerWidth - rect.width - 16));
+                var top = Math.max(16, y - 60);
+                el.style.left = left + 'px';
+                el.style.top = top + 'px';
+                setTimeout(function() {
+                    el.style.opacity = '0';
+                    el.style.transform = 'translateY(-8px)';
+                    el.style.transition = 'opacity 0.3s, transform 0.3s';
+                    setTimeout(function() { el.remove(); }, 300);
+                }, 2500);
+            }
+            
+            document.addEventListener('DOMContentLoaded', function() {
+                try { initWebGL(); } catch (e) { console.warn('WebGL init failed', e); }
+                document.querySelectorAll('.flower').forEach(function(flower) {
+                    flower.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        showToast(e.clientX, e.clientY);
+                    });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>

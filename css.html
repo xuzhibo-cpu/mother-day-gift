@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>css入门</title>
+    <!-- 样式优先级为后来者居上 -->
+    <link rel="stylesheet" href="css/css.css">
+    <style>
+        h1{
+            color: blue;
+        }
+        p{
+            color: red;
+        }
+        span{
+            color: gold;
+        }
+        ul{
+            /* 去掉列表样式 */
+            list-style: none;
+        }
+        a{
+            /* 取消下划线 */
+            text-decoration: none;
+        }
+        #shengcaier{
+            color: pink;
+        }
+        .love{
+            color: rgb(153, 0, 255);
+        }
+        .spec{
+            font-style: italic;
+        }
+        /* 原子类,类如其名 */
+        .fs12{
+            font-size: 12px;
+        }
+        .fs14{
+            font-size: 14px;
+        }
+        .fs16{
+            font-size: 16px;
+        }
+    </style>
+    <style>
+        @import url("css/css1.css");
+    </style>
+</head>
+<body>
+    <h1>牛逼</h1>
+    <h2 style="color:palegoldenrod;">我是一个标题</h2>
+    <p>我们一定<span>不负韶华，只争朝夕</span></p>
+    <div>
+        <ul>
+            <li>龙皓晨</li>
+            <li>圣采儿</li>
+            <li><span>光之晨曦</span></li>
+        </ul>
+    </div>
+    <a href="">这是一个超级链接</a>
+    <h1 id="shengcaier">我是圣采儿</h1>
+    <p class="love">我是圣采儿，我是死神。</p>
+    <Ul>
+        <li>我是圣采儿，我是死神。</li>
+        <li class="love fs12">我是圣采儿，我是死神。</li>
+        <li>我是圣采儿，我是死神。</li>
+        <li class="love spec fs14">我是圣采儿，我是死神。</li>
+        <li class="fs16 love">我是圣采儿，我是死神。</li>
+    </Ul>
+    <h3 class="spec">我是圣采儿，我是死神。</h3>
+</body>
+</html>

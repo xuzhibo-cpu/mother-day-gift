@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 后代选择器 */
+        div p{
+            color: #5d4da7;
+        }
+        div.box{
+            background-color: #f5f5f5;
+            font-size: 20px;
+            padding: 20px;
+            margin: 20px;
+            font-style: italic;
+        }
+        /* link:未访问过的链接 */
+        a:link{
+            color: #5d4da7;
+        }
+        /* visited:访问过的链接 */
+        a:visited{
+            color: #999;
+        }
+        /* hover:鼠标悬停在链接上 */
+        a:hover{
+            background-color: #ff4081;
+            color: #fff;
+        }
+        /* active:鼠标点击链接时 */
+        a:active{
+            font-size: 50px;
+        }
+        /* 子选择器 */
+        div>p{
+            color: #ff4081;
+        }
+        img+span{
+            color: #ff4081;
+        }
+        h1~h1{ 
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <h1>我是一个标题</h1>
+    <p>我是一个段落</p>
+    <div class="box">
+        <p>我是一个段落</p>
+    </div>
+    <a href="https://www.baidu.com" target="_blank">我是一个链接</a>
+    <div class="box">
+        <p>我是圣采儿，我是死神。</p>
+        <div>
+            <p>我是龙皓晨，我是光明，我独属于圣采儿。</p>
+        </div>
+    </div>
+    <p>
+        <p></p>
+        <img src="img/1.jpg" alt="wow">
+        <span>好</span>
+    </p>
+    <h1>圣采儿</h1>
+    <h1>圣采儿</h1>
+    <h1>圣采儿</h1>
+    <h1>圣采儿</h1>
+    <h1>圣采儿</h1>
+</body>
+</html>
