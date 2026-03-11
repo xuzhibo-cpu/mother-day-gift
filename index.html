@@ -17,10 +17,6 @@
             --poem-accent: #8B7355;
             --ink: #3D3429;
             --gold: #C9A86C;
-            --color-1: rgba(232, 196, 208, 0.65);
-            --color-2: rgba(232, 216, 184, 0.6);
-            --color-3: rgba(200, 220, 200, 0.55);
-            --color-4: rgba(212, 204, 232, 0.6);
         }
         
         * {
@@ -36,7 +32,7 @@
         
         body {
             font-family: 'Noto Serif SC', 'Cormorant Garamond', serif;
-            background: #F5EDE8;
+            background: #F5EDE4;
             min-height: 100vh;
             min-height: -webkit-fill-available;
             color: var(--warm-gray);
@@ -45,115 +41,142 @@
             overflow-x: hidden;
         }
         
-        /*  四色艺术背景 - 与鼠标交互 */
-        .bg-four-color {
+        /*  母亲节主题 - 点击切换色块背景（无模糊） */
+        .bg-slides {
             position: fixed;
             inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-        
-        .bg-four-color::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: 
-                radial-gradient(ellipse 90% 70% at 0% 0%, var(--color-1) 0%, transparent 55%),
-                radial-gradient(ellipse 80% 80% at 100% 0%, var(--color-2) 0%, transparent 55%),
-                radial-gradient(ellipse 85% 75% at 100% 100%, var(--color-3) 0%, transparent 55%),
-                radial-gradient(ellipse 80% 85% at 0% 100%, var(--color-4) 0%, transparent 55%);
-            opacity: 1;
-            animation: colorBreathe 20s ease-in-out infinite;
-        }
-        
-        @keyframes colorBreathe {
-            0%, 100% { filter: saturate(1); opacity: 1; }
-            50% { filter: saturate(1.05); opacity: 0.98; }
-        }
-        
-        .bg-four-color::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(
-                circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                rgba(255, 255, 255, 0.3) 0%,
-                rgba(255, 250, 245, 0.12) 40%,
-                transparent 65%
-            );
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
-        
-        .bg-four-color.active::after {
-            opacity: 1;
-        }
-        
-        /*  modern floating orbs */
-        .bg-particles {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
             z-index: 0;
             overflow: hidden;
+            cursor: pointer;
         }
         
-        .bg-particles span {
+        .bg-slide {
             position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(212, 184, 150, 0.4), rgba(184, 149, 107, 0.15));
-            filter: blur(1px);
-            animation: orbFloat 25s ease-in-out infinite;
-        }
-        
-        .bg-particles span:nth-child(1) { left: 5%; top: 15%; width: 120px; height: 120px; animation-delay: 0s; animation-duration: 22s; }
-        .bg-particles span:nth-child(2) { left: 70%; top: 70%; width: 180px; height: 180px; animation-delay: -5s; animation-duration: 28s; opacity: 0.8; }
-        .bg-particles span:nth-child(3) { left: 40%; top: 5%; width: 100px; height: 100px; animation-delay: -10s; animation-duration: 20s; }
-        .bg-particles span:nth-child(4) { left: 85%; top: 30%; width: 80px; height: 80px; animation-delay: -3s; animation-duration: 26s; opacity: 0.7; }
-        .bg-particles span:nth-child(5) { left: 15%; top: 60%; width: 150px; height: 150px; animation-delay: -8s; animation-duration: 24s; opacity: 0.6; }
-        .bg-particles span:nth-child(6) { left: 60%; top: 85%; width: 90px; height: 90px; animation-delay: -12s; animation-duration: 20s; }
-        
-        @keyframes orbFloat {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            33% { transform: translate(30px, -40px) scale(1.1); }
-            66% { transform: translate(-20px, 25px) scale(0.95); }
-        }
-        
-        /*  mouse-following glow - 置于背景最上层 */
-        .mouse-glow {
-            position: fixed;
             inset: 0;
-            pointer-events: none;
-            z-index: 5;
-            background: radial-gradient(
-                circle 350px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                rgba(212, 184, 150, 0.45) 0%,
-                rgba(184, 149, 107, 0.2) 25%,
-                transparent 55%
-            );
             opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        
-        .mouse-glow.active {
-            opacity: 1;
-        }
-        
-        /*  WebGL canvas layer */
-        #webgl-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
+            transition: opacity 0.6s ease;
             pointer-events: none;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .bg-slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .bg-block {
+            position: absolute;
+            border-radius: 0;
+            transition: transform 0.5s ease;
+        }
+        
+        /*  slide 1: 柔粉 + 米色 */
+        .bg-slide[data-slide="1"] .bg-block:nth-child(1) {
+            top: 0; left: 0;
+            width: 60%; height: 45%;
+            background: #F8E8EC;
+        }
+        .bg-slide[data-slide="1"] .bg-block:nth-child(2) {
+            top: 0; right: 0;
+            width: 45%; height: 55%;
+            background: #F5EDE4;
+        }
+        .bg-slide[data-slide="1"] .bg-block:nth-child(3) {
+            bottom: 0; left: 0;
+            width: 50%; height: 50%;
+            background: #F0E4DC;
+        }
+        .bg-slide[data-slide="1"] .bg-block:nth-child(4) {
+            bottom: 0; right: 0;
+            width: 55%; height: 48%;
+            background: #E8D8D4;
+        }
+        
+        /*  slide 2: 暖杏 + 玫瑰 */
+        .bg-slide[data-slide="2"] .bg-block:nth-child(1) {
+            top: 0; right: 0;
+            width: 70%; height: 40%;
+            background: #F5E6E0;
+        }
+        .bg-slide[data-slide="2"] .bg-block:nth-child(2) {
+            top: 40%; left: 0;
+            width: 40%; height: 60%;
+            background: #F2E4E8;
+        }
+        .bg-slide[data-slide="2"] .bg-block:nth-child(3) {
+            bottom: 0; right: 0;
+            width: 65%; height: 45%;
+            background: #EDE0E4;
+        }
+        
+        /*  slide 3: 奶油 + 淡金 */
+        .bg-slide[data-slide="3"] .bg-block:nth-child(1) {
+            top: 0; left: 0;
+            width: 100%; height: 35%;
+            background: #FAF0E8;
+        }
+        .bg-slide[data-slide="3"] .bg-block:nth-child(2) {
+            top: 35%; left: 0;
+            width: 35%; height: 65%;
+            background: #F5EDE4;
+        }
+        .bg-slide[data-slide="3"] .bg-block:nth-child(3) {
+            top: 35%; right: 0;
+            width: 70%; height: 65%;
+            background: #F8ECE0;
+        }
+        
+        /*  slide 4: 淡紫粉 + 暖灰 */
+        .bg-slide[data-slide="4"] .bg-block:nth-child(1) {
+            top: 0; left: 0;
+            width: 50%; height: 60%;
+            background: #F0E8EC;
+        }
+        .bg-slide[data-slide="4"] .bg-block:nth-child(2) {
+            top: 0; right: 0;
+            width: 55%; height: 50%;
+            background: #EDE4E8;
+        }
+        .bg-slide[data-slide="4"] .bg-block:nth-child(3) {
+            bottom: 0; left: 25%;
+            width: 55%; height: 55%;
+            background: #E8E0E4;
+        }
+        
+        .bg-click-hint {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 5;
+            display: flex;
+            gap: 8px;
+        }
+        
+        .bg-click-hint .bg-dot {
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        
+        .bg-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(184, 149, 107, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .bg-dot.active {
+            background: var(--accent);
+            transform: scale(1.2);
         }
         
         .container {
             position: relative;
             z-index: 10;
             min-height: 100vh;
+            pointer-events: none;
             min-height: 100dvh;
             display: flex;
             align-items: center;
@@ -164,6 +187,7 @@
         }
         
         .card {
+            pointer-events: auto;
             max-width: 560px;
             width: 100%;
             background: 
@@ -467,30 +491,6 @@
                 height: 32px;
             }
             
-            .mouse-glow {
-                background: radial-gradient(
-                    circle 220px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                    rgba(212, 184, 150, 0.4) 0%,
-                    rgba(184, 149, 107, 0.15) 25%,
-                    transparent 55%
-                );
-            }
-            
-            .bg-four-color::after {
-                background: radial-gradient(
-                    circle 280px at var(--mouse-x, 50%) var(--mouse-y, 50%),
-                    rgba(255, 255, 255, 0.28) 0%,
-                    rgba(255, 250, 245, 0.1) 35%,
-                    transparent 60%
-                );
-            }
-            
-            .bg-particles span:nth-child(1) { width: 80px; height: 80px; }
-            .bg-particles span:nth-child(2) { width: 120px; height: 120px; }
-            .bg-particles span:nth-child(3) { width: 70px; height: 70px; }
-            .bg-particles span:nth-child(4) { width: 60px; height: 60px; }
-            .bg-particles span:nth-child(5) { width: 100px; height: 100px; }
-            .bg-particles span:nth-child(6) { width: 65px; height: 65px; }
         }
         
         @media (max-width: 375px) {
@@ -510,13 +510,27 @@
     </style>
 </head>
 <body>
-    <canvas id="webgl-canvas" aria-hidden="true"></canvas>
-    <div class="bg-four-color" id="bg-four-color" aria-hidden="true"></div>
-    <div class="bg-particles" aria-hidden="true">
-        <span></span><span></span><span></span>
-        <span></span><span></span><span></span>
+    <div class="bg-slides" id="bg-slides" aria-hidden="true">
+        <div class="bg-slide active" data-slide="1">
+            <div class="bg-block"></div><div class="bg-block"></div>
+            <div class="bg-block"></div><div class="bg-block"></div>
+        </div>
+        <div class="bg-slide" data-slide="2">
+            <div class="bg-block"></div><div class="bg-block"></div><div class="bg-block"></div>
+        </div>
+        <div class="bg-slide" data-slide="3">
+            <div class="bg-block"></div><div class="bg-block"></div><div class="bg-block"></div>
+        </div>
+        <div class="bg-slide" data-slide="4">
+            <div class="bg-block"></div><div class="bg-block"></div><div class="bg-block"></div>
+        </div>
     </div>
-    <div class="mouse-glow" id="mouse-glow" aria-hidden="true"></div>
+    <div class="bg-click-hint" aria-hidden="true">
+        <span class="bg-dot active" data-dot="0"></span>
+        <span class="bg-dot" data-dot="1"></span>
+        <span class="bg-dot" data-dot="2"></span>
+        <span class="bg-dot" data-dot="3"></span>
+    </div>
     <div class="container">
         <div class="card">
             <div class="title-container">
@@ -566,78 +580,8 @@
         </div>
     </div>
     
-    <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
     <script>
         (function() {
-            var scene, camera, renderer, particles;
-            var mouseX = 0.5, mouseY = 0.5, targetX = 0.5, targetY = 0.5;
-            var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window);
-            
-            function initWebGL() {
-                var canvas = document.getElementById('webgl-canvas');
-                if (!canvas) return;
-                scene = new THREE.Scene();
-                camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                camera.position.z = 5;
-                renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: !isMobile });
-                var dpr = isMobile ? Math.min(window.devicePixelRatio, 1.5) : Math.min(window.devicePixelRatio, 2);
-                renderer.setSize(window.innerWidth, window.innerHeight);
-                renderer.setPixelRatio(dpr);
-                
-                var geometry = new THREE.BufferGeometry();
-                var count = isMobile ? 180 : 400;
-                var positions = new Float32Array(count * 3);
-                var colors = new Float32Array(count * 3);
-                var c1 = new THREE.Color(0xd4b896);
-                var c2 = new THREE.Color(0xb8956b);
-                
-                for (var i = 0; i < count * 3; i += 3) {
-                    positions[i] = (Math.random() - 0.5) * 12;
-                    positions[i + 1] = (Math.random() - 0.5) * 12;
-                    positions[i + 2] = (Math.random() - 0.5) * 8;
-                    var t = Math.random();
-                    var c = c1.clone().lerp(c2, t);
-                    colors[i] = c.r;
-                    colors[i + 1] = c.g;
-                    colors[i + 2] = c.b;
-                }
-                geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-                geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-                
-                var material = new THREE.PointsMaterial({
-                    size: 0.04,
-                    vertexColors: true,
-                    transparent: true,
-                    opacity: 0.5,
-                    blending: THREE.AdditiveBlending,
-                    depthWrite: false
-                });
-                particles = new THREE.Points(geometry, material);
-                scene.add(particles);
-                
-                function animate() {
-                    requestAnimationFrame(animate);
-                    if (particles) {
-                        var mx = (targetX - 0.5) * 0.004;
-                        var my = (targetY - 0.5) * 0.004;
-                        particles.rotation.y += 0.0008 + mx;
-                        particles.rotation.x += 0.0002 + my;
-                    }
-                    renderer.render(scene, camera);
-                }
-                animate();
-                
-                function onResize() {
-                    var w = window.innerWidth;
-                    var h = window.innerHeight;
-                    camera.aspect = w / h;
-                    camera.updateProjectionMatrix();
-                    renderer.setSize(w, h);
-                }
-                window.addEventListener('resize', onResize);
-                if (window.visualViewport) window.visualViewport.addEventListener('resize', onResize);
-            }
-            
             function showToast(x, y, text) {
                 x = x || window.innerWidth / 2;
                 y = y || window.innerHeight / 2;
@@ -659,71 +603,39 @@
                 }, 2500);
             }
             
-            function initMouseInteraction() {
-                var glow = document.getElementById('mouse-glow');
-                var bgFour = document.getElementById('bg-four-color');
-                var smoothX = 0.5, smoothY = 0.5;
-                var isMoving = false;
-                var hideTimer = 0;
+            function initBgSlides() {
+                var slides = document.querySelectorAll('.bg-slide');
+                var dots = document.querySelectorAll('.bg-dot');
+                var container = document.getElementById('bg-slides');
+                var current = 0;
                 
-                function updateTarget(clientX, clientY) {
-                    targetX = clientX / window.innerWidth;
-                    targetY = clientY / window.innerHeight;
-                    if (!isMoving) {
-                        isMoving = true;
-                        if (glow) glow.classList.add('active');
-                        if (bgFour) bgFour.classList.add('active');
-                    }
-                    clearTimeout(hideTimer);
-                    hideTimer = setTimeout(function() {
-                        isMoving = false;
-                        if (glow) glow.classList.remove('active');
-                        if (bgFour) bgFour.classList.remove('active');
-                    }, 3000);
+                function goTo(i) {
+                    current = (i + 4) % 4;
+                    slides.forEach(function(s, idx) {
+                        s.classList.toggle('active', idx === current);
+                    });
+                    dots.forEach(function(d, idx) {
+                        d.classList.toggle('active', idx === current);
+                    });
                 }
                 
-                document.addEventListener('mousemove', function(e) { updateTarget(e.clientX, e.clientY); });
-                document.addEventListener('touchstart', function(e) {
-                    if (e.touches[0]) updateTarget(e.touches[0].clientX, e.touches[0].clientY);
-                }, { passive: true });
-                document.addEventListener('touchmove', function(e) {
-                    if (e.touches[0]) updateTarget(e.touches[0].clientX, e.touches[0].clientY);
-                }, { passive: true });
+                if (container) {
+                    container.addEventListener('click', function(e) {
+                        if (e.target.closest('.card') || e.target.closest('.bg-click-hint')) return;
+                        goTo(current + 1);
+                    });
+                }
                 
-                (function tick() {
-                    smoothX += (targetX - smoothX) * 0.06;
-                    smoothY += (targetY - smoothY) * 0.06;
-                    var mx = (smoothX * 100) + '%';
-                    var my = (smoothY * 100) + '%';
-                    document.documentElement.style.setProperty('--mouse-x', mx);
-                    document.documentElement.style.setProperty('--mouse-y', my);
-                    if (glow) {
-                        glow.style.setProperty('--mouse-x', mx);
-                        glow.style.setProperty('--mouse-y', my);
-                    }
-                    var orbLayer = document.querySelector('.bg-particles');
-                    if (orbLayer) {
-                        var k = isMobile ? 18 : 28;
-                        var dx = (smoothX - 0.5) * k;
-                        var dy = (smoothY - 0.5) * k;
-                        orbLayer.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
-                    }
-                    var r = document.documentElement;
-                    var d1 = 1 - Math.hypot(smoothX, smoothY) * 1.2;
-                    var d2 = 1 - Math.hypot(1 - smoothX, smoothY) * 1.2;
-                    var d3 = 1 - Math.hypot(1 - smoothX, 1 - smoothY) * 1.2;
-                    var d4 = 1 - Math.hypot(smoothX, 1 - smoothY) * 1.2;
-                    r.style.setProperty('--color-1', 'rgba(232,196,208,' + (0.4 + Math.max(0, d1) * 0.4) + ')');
-                    r.style.setProperty('--color-2', 'rgba(232,216,184,' + (0.4 + Math.max(0, d2) * 0.4) + ')');
-                    r.style.setProperty('--color-3', 'rgba(200,220,200,' + (0.35 + Math.max(0, d3) * 0.4) + ')');
-                    r.style.setProperty('--color-4', 'rgba(212,204,232,' + (0.4 + Math.max(0, d4) * 0.4) + ')');
-                    requestAnimationFrame(tick);
-                })();
+                dots.forEach(function(dot, i) {
+                    dot.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        goTo(i);
+                    });
+                });
             }
             
             document.addEventListener('DOMContentLoaded', function() {
-                try { initWebGL(); } catch (e) { console.warn('WebGL init failed', e); }
-                initMouseInteraction();
+                initBgSlides();
                 var lastToastTime = 0;
                 function handleFlowerTap(clientX, clientY) {
                     if (Date.now() - lastToastTime < 400) return;

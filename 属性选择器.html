@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    img[alt]{
+        border: 2px solid red;
+    }
+    img[alt="wow"]{
+        border: 2px solid blue;
+    }
+    img[alt="xizi"]{
+        border: 2px solid green;
+    }
+    /* 以w开头 */
+    img[alt^="w"]{
+        border: 2px solid yellow;
+    }
+</style>
+<body>
+    <img src="img/1.jpg" alt="wow">
+    <img src="img/2.jpg" alt="xizi">
+</body>
+</html>
