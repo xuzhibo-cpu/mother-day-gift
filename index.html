@@ -176,16 +176,6 @@
             gap: 8px;
         }
 
-        .bg-hint-text {
-            font-size: 0.78rem;
-            letter-spacing: 0.08em;
-            color: color-mix(in srgb, var(--bg-accent) 70%, #6f6251 30%);
-            background: rgba(255, 250, 244, 0.65);
-            border: 1px solid rgba(184, 149, 107, 0.2);
-            border-radius: 999px;
-            padding: 0.2rem 0.55rem;
-        }
-        
         .bg-click-hint .bg-dot {
             cursor: pointer;
             pointer-events: auto;
@@ -221,9 +211,26 @@
             transform: scale(1.2);
         }
 
+        .bg-caption {
+            position: fixed;
+            bottom: 4.2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 6;
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            color: color-mix(in srgb, var(--bg-accent) 80%, #5f5344 20%);
+            background: rgba(255, 250, 244, 0.55);
+            border: 1px solid rgba(184, 149, 107, 0.18);
+            border-radius: 999px;
+            padding: 0.22rem 0.65rem;
+            backdrop-filter: blur(1px);
+        }
+
         .bg-dot:focus-visible,
         .flower:focus-visible,
-        .memory-btn:focus-visible {
+        .memory-btn:focus-visible,
+        .mini-btn:focus-visible {
             outline: 2px solid var(--bg-accent);
             outline-offset: 2px;
         }
@@ -453,7 +460,30 @@
             justify-content: flex-end;
             margin-top: 0.8rem;
         }
-        
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .mini-btn {
+            padding: 0.5rem 0.9rem;
+            border: 1px solid color-mix(in srgb, var(--bg-accent) 45%, #ffffff 55%);
+            background: color-mix(in srgb, var(--bg-accent-soft) 35%, #ffffff 65%);
+            color: var(--ink);
+            border-radius: 999px;
+            font-size: 0.84rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .mini-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(92, 83, 70, 0.12);
+        }
+
         @keyframes fadeIn {
             to { opacity: 1; }
         }
@@ -536,6 +566,16 @@
                 font-size: 1.05rem;
                 max-width: calc(100vw - 32px);
             }
+            body.is-wechat .card {
+                max-width: 94%;
+                padding: 1.85rem 1.05rem;
+            }
+            body.is-wechat .bg-caption {
+                bottom: 3rem;
+            }
+            body.is-wechat .bg-click-hint {
+                bottom: 0.45rem;
+            }
         }
         
         @keyframes toastIn {
@@ -574,8 +614,8 @@
             .bg-click-hint {
                 bottom: 1rem;
             }
-
-            .bg-hint-text {
+            .bg-caption {
+                bottom: 3.7rem;
                 font-size: 0.72rem;
             }
         }
@@ -630,6 +670,14 @@
                 width: 32px;
                 height: 32px;
             }
+
+            .action-row {
+                gap: 0.45rem;
+            }
+            .mini-btn {
+                font-size: 0.8rem;
+                padding: 0.46rem 0.75rem;
+            }
             
         }
         
@@ -646,6 +694,25 @@
             .bg-click-hint {
                 bottom: 0.75rem;
             }
+            .bg-caption {
+                bottom: 3.3rem;
+            }
+        }
+
+        /* 微信内打开优先优化 */
+        body.is-wechat .container {
+            min-height: 100svh;
+            padding-top: max(1.2rem, env(safe-area-inset-top));
+            padding-bottom: max(2.2rem, env(safe-area-inset-bottom));
+        }
+
+        body.is-wechat .card {
+            max-width: 91%;
+            box-shadow:
+                0 1px 1px rgba(184, 149, 107, 0.07),
+                0 2px 10px rgba(92, 83, 70, 0.06),
+                0 16px 30px -16px rgba(61, 52, 41, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.6);
         }
         
         @media (prefers-reduced-motion: reduce) {
@@ -674,12 +741,12 @@
         </div>
     </div>
     <div class="bg-click-hint" role="group" aria-label="背景切换按钮组">
-        <span class="bg-hint-text">点击背景切换</span>
         <span class="bg-dot active" data-dot="0" role="button" tabindex="0" aria-label="切换背景1"></span>
         <span class="bg-dot" data-dot="1" role="button" tabindex="0" aria-label="切换背景2"></span>
         <span class="bg-dot" data-dot="2" role="button" tabindex="0" aria-label="切换背景3"></span>
         <span class="bg-dot" data-dot="3" role="button" tabindex="0" aria-label="切换背景4"></span>
     </div>
+    <div class="bg-caption" id="bgCaption" aria-live="polite">温柔如春，爱意常在</div>
     <div class="container">
         <div class="card">
             <div class="title-container">
@@ -706,9 +773,9 @@
                 爱您的儿子 续智博<br>
                 2026年妇女节
             </div>
-            <button class="memory-btn" id="memoryBtn" type="button" aria-label="打开给妈妈的话">
-                给妈妈的话
-            </button>
+            <div class="action-row">
+                <button class="mini-btn" id="memoryBtn" type="button" aria-label="打开给妈妈的话">给妈妈的话</button>
+            </div>
             
             <div class="floral">
                 <div class="flower" title="点击试试" aria-label="点击试试" tabindex="0" role="button">
@@ -740,7 +807,6 @@
             </div>
         </div>
     </div>
-    
     <script>
         (function() {
             function showToast(x, y, text) {
@@ -763,11 +829,12 @@
                     setTimeout(function() { el.remove(); }, 300);
                 }, 2500);
             }
-            
+
             function initBgSlides() {
                 var slides = document.querySelectorAll('.bg-slide');
                 var dots = document.querySelectorAll('.bg-dot');
                 var container = document.getElementById('bg-slides');
+                var caption = document.getElementById('bgCaption');
                 var current = 0;
                 var autoTimer = null;
                 var pauseTimer = null;
@@ -776,6 +843,12 @@
                     { accent: '#B98692', soft: '#EDE0E4' },
                     { accent: '#C6A273', soft: '#F8ECE0' },
                     { accent: '#A58FA8', soft: '#E8E0E4' }
+                ];
+                var captions = [
+                    '温柔如春，爱意常在',
+                    '您在身边，岁月都温软',
+                    '一粥一饭，皆是深情',
+                    '愿您安然，笑意常明'
                 ];
                 
                 function applyPalette(index) {
@@ -794,6 +867,7 @@
                         d.setAttribute('aria-pressed', idx === current ? 'true' : 'false');
                     });
                     applyPalette(current);
+                    if (caption) caption.textContent = captions[current] || captions[0];
                 }
 
                 function startAuto() {
@@ -864,8 +938,11 @@
                     if (e.key === 'Escape' && dialog.classList.contains('open')) closeDialog();
                 });
             }
-            
+
             document.addEventListener('DOMContentLoaded', function() {
+                if (/micromessenger/i.test(navigator.userAgent)) {
+                    document.body.classList.add('is-wechat');
+                }
                 initBgSlides();
                 var lastToastTime = 0;
                 function handleFlowerTap(clientX, clientY) {
