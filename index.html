@@ -6,7 +6,7 @@
     <title>妇女节快乐 - 梁丽女士</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Ma+Shan+Zheng&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --cream: #FBF6F0;
@@ -15,6 +15,12 @@
             --accent: #B8956B;
             --accent-soft: #D4B896;
             --poem-accent: #8B7355;
+            --ink: #3D3429;
+            --gold: #C9A86C;
+            --color-1: rgba(232, 196, 208, 0.65);
+            --color-2: rgba(232, 216, 184, 0.6);
+            --color-3: rgba(200, 220, 200, 0.55);
+            --color-4: rgba(212, 204, 232, 0.6);
         }
         
         * {
@@ -30,7 +36,7 @@
         
         body {
             font-family: 'Noto Serif SC', 'Cormorant Garamond', serif;
-            background: var(--cream);
+            background: #F5EDE8;
             min-height: 100vh;
             min-height: -webkit-fill-available;
             color: var(--warm-gray);
@@ -39,23 +45,48 @@
             overflow-x: hidden;
         }
         
-        /*  modern mesh gradient background */
-        .bg-mesh {
+        /*  四色艺术背景 - 与鼠标交互 */
+        .bg-four-color {
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(ellipse 120% 80% at 20% 20%, rgba(212, 184, 150, 0.25) 0%, transparent 50%),
-                radial-gradient(ellipse 100% 120% at 80% 80%, rgba(184, 149, 107, 0.2) 0%, transparent 50%),
-                radial-gradient(ellipse 80% 100% at 50% 50%, rgba(210, 180, 140, 0.15) 0%, transparent 60%),
-                linear-gradient(180deg, #FDF8F3 0%, #F5EDE4 50%, #F0E6DC 100%);
-            animation: meshPulse 15s ease-in-out infinite;
             pointer-events: none;
             z-index: 0;
         }
         
-        @keyframes meshPulse {
-            0%, 100% { opacity: 1; filter: saturate(1); }
-            50% { opacity: 0.96; filter: saturate(1.08); }
+        .bg-four-color::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(ellipse 90% 70% at 0% 0%, var(--color-1) 0%, transparent 55%),
+                radial-gradient(ellipse 80% 80% at 100% 0%, var(--color-2) 0%, transparent 55%),
+                radial-gradient(ellipse 85% 75% at 100% 100%, var(--color-3) 0%, transparent 55%),
+                radial-gradient(ellipse 80% 85% at 0% 100%, var(--color-4) 0%, transparent 55%);
+            opacity: 1;
+            animation: colorBreathe 20s ease-in-out infinite;
+        }
+        
+        @keyframes colorBreathe {
+            0%, 100% { filter: saturate(1); opacity: 1; }
+            50% { filter: saturate(1.05); opacity: 0.98; }
+        }
+        
+        .bg-four-color::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle 400px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                rgba(255, 255, 255, 0.3) 0%,
+                rgba(255, 250, 245, 0.12) 40%,
+                transparent 65%
+            );
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .bg-four-color.active::after {
+            opacity: 1;
         }
         
         /*  modern floating orbs */
@@ -135,12 +166,24 @@
         .card {
             max-width: 560px;
             width: 100%;
-            background: rgba(255, 252, 248, 0.9);
-            border: 1px solid rgba(184, 149, 107, 0.2);
-            border-radius: 2px;
+            background: 
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
+                linear-gradient(180deg, rgba(255,252,248,0.98) 0%, rgba(250,245,238,0.95) 100%);
+            border: 2px double rgba(184, 149, 107, 0.35);
+            border-radius: 3px;
             padding: 3.5rem 2.5rem;
-            box-shadow: 0 2px 24px rgba(92, 83, 70, 0.06);
+            box-shadow: 
+                0 1px 1px rgba(184, 149, 107, 0.08),
+                0 4px 16px rgba(92, 83, 70, 0.06),
+                0 24px 48px -12px rgba(61, 52, 41, 0.12),
+                inset 0 1px 0 rgba(255,255,255,0.6);
             position: relative;
+            animation: cardEnter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+        
+        @keyframes cardEnter {
+            from { opacity: 0; transform: translateY(24px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
         .card::before {
@@ -154,6 +197,15 @@
             opacity: 0.6;
         }
         
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 12px;
+            border: 1px solid rgba(184, 149, 107, 0.12);
+            border-radius: 1px;
+            pointer-events: none;
+        }
+        
         .title-container {
             text-align: center;
             margin-bottom: 2.5rem;
@@ -161,45 +213,86 @@
         
         .label {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.85rem;
-            letter-spacing: 0.2em;
+            font-size: 0.8rem;
+            letter-spacing: 0.35em;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.5rem;
             opacity: 0;
             animation: fadeIn 0.8s ease 0.2s forwards;
         }
         
+        .label::before,
+        .label::after {
+            content: '—';
+            margin: 0 0.5em;
+            opacity: 0.5;
+        }
+        
         .name {
-            font-family: 'Noto Serif SC', serif;
-            font-size: clamp(2.2rem, 6vw, 3.2rem);
-            font-weight: 600;
-            color: var(--warm-gray);
-            letter-spacing: 0.15em;
+            font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
+            font-size: clamp(2.5rem, 7vw, 3.5rem);
+            font-weight: 400;
+            color: var(--ink);
+            letter-spacing: 0.2em;
             opacity: 0;
-            animation: fadeIn 0.8s ease 0.4s forwards;
+            animation: nameReveal 1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s forwards;
+        }
+        
+        @keyframes nameReveal {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         
         .poem {
-            font-family: 'Noto Serif SC', serif;
-            font-size: 1.15rem;
+            font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
+            font-size: 1.5rem;
             text-align: center;
-            color: var(--warm-gray);
-            margin: 2rem 0;
+            color: var(--ink);
+            margin: 2.5rem 0;
+            letter-spacing: 0.08em;
+            line-height: 2.2;
+            position: relative;
+            padding: 0 1rem;
+        }
+        
+        .poem .line {
+            display: block;
             opacity: 0;
-            animation: fadeIn 0.8s ease 0.6s forwards;
+            animation: poemReveal 1s ease forwards;
+        }
+        .poem .line:nth-child(1) { animation-delay: 0.5s; }
+        .poem .line:nth-child(2) { animation-delay: 0.65s; }
+        .poem .line:nth-child(3) { animation-delay: 0.8s; }
+        .poem .line:nth-child(4) { animation-delay: 0.95s; }
+        .poem .line:nth-child(5) { animation-delay: 1.1s; }
+        
+        @keyframes poemReveal {
+            from { opacity: 0; transform: translateY(8px); letter-spacing: 0.2em; }
+            to { opacity: 1; transform: translateY(0); letter-spacing: 0.08em; }
         }
         
         .poem .highlight {
-            color: var(--poem-accent);
+            color: var(--gold);
             font-weight: 600;
         }
         
         .poem .attribution {
-            font-size: 0.95rem;
+            font-family: 'Cormorant Garamond', 'Noto Serif SC', serif;
+            font-size: 0.9rem;
             font-style: italic;
             color: var(--accent);
-            margin-top: 1rem;
+            margin-top: 1.25rem;
+            letter-spacing: 0.15em;
+        }
+        
+        .poem-divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+            margin: 1.5rem auto;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.15s forwards;
         }
         
         .message {
@@ -207,19 +300,21 @@
             font-size: 1rem;
             color: var(--warm-gray);
             margin: 2rem 0 1.5rem;
+            line-height: 1.9;
             opacity: 0;
-            animation: fadeIn 0.8s ease 0.8s forwards;
+            animation: fadeIn 0.9s ease 1s forwards;
         }
         
         .signature {
             text-align: right;
-            font-size: 0.95rem;
-            color: var(--accent);
+            font-family: 'Ma Shan Zheng', 'Noto Serif SC', cursive;
+            font-size: 1.1rem;
+            color: var(--ink);
             margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(184, 149, 107, 0.2);
+            padding-top: 1.25rem;
+            border-top: 1px solid rgba(184, 149, 107, 0.25);
             opacity: 0;
-            animation: fadeIn 0.8s ease 1s forwards;
+            animation: fadeIn 0.8s ease 1.2s forwards;
         }
         
         @keyframes fadeIn {
@@ -269,6 +364,18 @@
         .floral .flower:hover svg {
             opacity: 1;
             stroke: var(--accent);
+        }
+        
+        .seal {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #D4B896, #B8956B);
+            border: 2px solid rgba(184, 149, 107, 0.5);
+            box-shadow: inset 0 1px 2px rgba(255,255,255,0.3), 0 2px 6px rgba(92,83,70,0.2);
+            margin: 1.5rem auto 0;
+            opacity: 0;
+            animation: fadeIn 0.8s ease 1.5s forwards;
         }
         
         /* 妈妈辛苦了 toast */
@@ -330,13 +437,14 @@
             }
             
             .name {
-                font-size: 2rem;
-                letter-spacing: 0.1em;
+                font-size: 2.2rem;
+                letter-spacing: 0.12em;
             }
             
             .poem {
-                font-size: 1rem;
+                font-size: 1.2rem;
                 margin: 1.5rem 0;
+                line-height: 2;
             }
             
             .message {
@@ -368,6 +476,15 @@
                 );
             }
             
+            .bg-four-color::after {
+                background: radial-gradient(
+                    circle 280px at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                    rgba(255, 255, 255, 0.28) 0%,
+                    rgba(255, 250, 245, 0.1) 35%,
+                    transparent 60%
+                );
+            }
+            
             .bg-particles span:nth-child(1) { width: 80px; height: 80px; }
             .bg-particles span:nth-child(2) { width: 120px; height: 120px; }
             .bg-particles span:nth-child(3) { width: 70px; height: 70px; }
@@ -394,7 +511,7 @@
 </head>
 <body>
     <canvas id="webgl-canvas" aria-hidden="true"></canvas>
-    <div class="bg-mesh" aria-hidden="true"></div>
+    <div class="bg-four-color" id="bg-four-color" aria-hidden="true"></div>
     <div class="bg-particles" aria-hidden="true">
         <span></span><span></span><span></span>
         <span></span><span></span><span></span>
@@ -408,13 +525,13 @@
             </div>
             
             <div class="poem">
-                哺雏<span class="highlight">梁</span>燕归，<br>
-                禾沐<span class="highlight">丽</span>春晖。<br>
-                若道<span class="highlight">恩</span>深重，<br>
-                应知<span class="highlight">话</span>与谁。<br>
-                <span class="attribution">——《感至恩》</span>
+                <span class="line">哺雏<span class="highlight">梁</span>燕归，</span>
+                <span class="line">禾沐<span class="highlight">丽</span>春晖。</span>
+                <span class="line">若道<span class="highlight">恩</span>深重，</span>
+                <span class="line">应知<span class="highlight">话</span>与谁。</span>
+                <span class="line attribution">——《感至恩》</span>
             </div>
-            
+            <div class="poem-divider" aria-hidden="true"></div>
             <div class="message">
                 亲爱的妈妈梁丽，今天是属于您的节日。感谢您一直以来的付出和关爱，
                 您的爱是我生命中最温暖的阳光。愿您永远年轻美丽，健康快乐！
@@ -427,7 +544,7 @@
             </div>
             
             <div class="floral">
-                <div class="flower" title="点击试试">
+                <div class="flower" title="点击试试" aria-label="点击试试">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="2"/>
                         <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/>
@@ -445,6 +562,7 @@
                     </svg>
                 </div>
             </div>
+            <div class="seal" aria-hidden="true"></div>
         </div>
     </div>
     
@@ -543,6 +661,7 @@
             
             function initMouseInteraction() {
                 var glow = document.getElementById('mouse-glow');
+                var bgFour = document.getElementById('bg-four-color');
                 var smoothX = 0.5, smoothY = 0.5;
                 var isMoving = false;
                 var hideTimer = 0;
@@ -553,11 +672,13 @@
                     if (!isMoving) {
                         isMoving = true;
                         if (glow) glow.classList.add('active');
+                        if (bgFour) bgFour.classList.add('active');
                     }
                     clearTimeout(hideTimer);
                     hideTimer = setTimeout(function() {
                         isMoving = false;
                         if (glow) glow.classList.remove('active');
+                        if (bgFour) bgFour.classList.remove('active');
                     }, 3000);
                 }
                 
@@ -572,9 +693,13 @@
                 (function tick() {
                     smoothX += (targetX - smoothX) * 0.06;
                     smoothY += (targetY - smoothY) * 0.06;
+                    var mx = (smoothX * 100) + '%';
+                    var my = (smoothY * 100) + '%';
+                    document.documentElement.style.setProperty('--mouse-x', mx);
+                    document.documentElement.style.setProperty('--mouse-y', my);
                     if (glow) {
-                        glow.style.setProperty('--mouse-x', (smoothX * 100) + '%');
-                        glow.style.setProperty('--mouse-y', (smoothY * 100) + '%');
+                        glow.style.setProperty('--mouse-x', mx);
+                        glow.style.setProperty('--mouse-y', my);
                     }
                     var orbLayer = document.querySelector('.bg-particles');
                     if (orbLayer) {
@@ -583,6 +708,15 @@
                         var dy = (smoothY - 0.5) * k;
                         orbLayer.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
                     }
+                    var r = document.documentElement;
+                    var d1 = 1 - Math.hypot(smoothX, smoothY) * 1.2;
+                    var d2 = 1 - Math.hypot(1 - smoothX, smoothY) * 1.2;
+                    var d3 = 1 - Math.hypot(1 - smoothX, 1 - smoothY) * 1.2;
+                    var d4 = 1 - Math.hypot(smoothX, 1 - smoothY) * 1.2;
+                    r.style.setProperty('--color-1', 'rgba(232,196,208,' + (0.4 + Math.max(0, d1) * 0.4) + ')');
+                    r.style.setProperty('--color-2', 'rgba(232,216,184,' + (0.4 + Math.max(0, d2) * 0.4) + ')');
+                    r.style.setProperty('--color-3', 'rgba(200,220,200,' + (0.35 + Math.max(0, d3) * 0.4) + ')');
+                    r.style.setProperty('--color-4', 'rgba(212,204,232,' + (0.4 + Math.max(0, d4) * 0.4) + ')');
                     requestAnimationFrame(tick);
                 })();
             }
