@@ -17,6 +17,8 @@
             --poem-accent: #8B7355;
             --ink: #3D3429;
             --gold: #C9A86C;
+            --bg-accent: #B8956B;
+            --bg-accent-soft: #E8D8D4;
         }
         
         * {
@@ -54,7 +56,8 @@
             position: absolute;
             inset: 0;
             opacity: 0;
-            transition: opacity 0.6s ease;
+            transform: scale(1.02);
+            transition: opacity 0.6s ease, transform 0.8s ease;
             pointer-events: none;
             display: flex;
             flex-wrap: wrap;
@@ -62,13 +65,31 @@
         
         .bg-slide.active {
             opacity: 1;
+            transform: scale(1);
             pointer-events: auto;
         }
         
         .bg-block {
             position: absolute;
             border-radius: 0;
-            transition: transform 0.5s ease;
+            transform: translate3d(0, 18px, 0);
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .bg-slide.active .bg-block {
+            transform: translate3d(0, 0, 0);
+        }
+
+        .bg-slide .bg-block:nth-child(2) {
+            transition-delay: 40ms;
+        }
+
+        .bg-slide .bg-block:nth-child(3) {
+            transition-delay: 80ms;
+        }
+
+        .bg-slide .bg-block:nth-child(4) {
+            transition-delay: 120ms;
         }
         
         /*  slide 1: 柔粉 + 米色 */
@@ -151,7 +172,18 @@
             transform: translateX(-50%);
             z-index: 5;
             display: flex;
+            align-items: center;
             gap: 8px;
+        }
+
+        .bg-hint-text {
+            font-size: 0.78rem;
+            letter-spacing: 0.08em;
+            color: color-mix(in srgb, var(--bg-accent) 70%, #6f6251 30%);
+            background: rgba(255, 250, 244, 0.65);
+            border: 1px solid rgba(184, 149, 107, 0.2);
+            border-radius: 999px;
+            padding: 0.2rem 0.55rem;
         }
         
         .bg-click-hint .bg-dot {
@@ -160,6 +192,19 @@
         }
         
         .bg-dot {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: transparent;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .bg-dot::before {
+            content: '';
             width: 8px;
             height: 8px;
             border-radius: 50%;
@@ -168,8 +213,19 @@
         }
         
         .bg-dot.active {
-            background: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .bg-dot.active::before {
+            background: var(--bg-accent);
             transform: scale(1.2);
+        }
+
+        .bg-dot:focus-visible,
+        .flower:focus-visible,
+        .memory-btn:focus-visible {
+            outline: 2px solid var(--bg-accent);
+            outline-offset: 2px;
         }
         
         .container {
@@ -193,7 +249,7 @@
             background: 
                 url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E"),
                 linear-gradient(180deg, rgba(255,252,248,0.98) 0%, rgba(250,245,238,0.95) 100%);
-            border: 2px double rgba(184, 149, 107, 0.35);
+            border: 2px double color-mix(in srgb, var(--bg-accent) 42%, #ffffff 58%);
             border-radius: 3px;
             padding: 3.5rem 2.5rem;
             box-shadow: 
@@ -203,6 +259,7 @@
                 inset 0 1px 0 rgba(255,255,255,0.6);
             position: relative;
             animation: cardEnter 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
         
         @keyframes cardEnter {
@@ -217,7 +274,7 @@
             left: 2rem;
             right: 2rem;
             height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-soft), transparent);
+            background: linear-gradient(90deg, transparent, var(--bg-accent-soft), transparent);
             opacity: 0.6;
         }
         
@@ -225,7 +282,7 @@
             content: '';
             position: absolute;
             inset: 12px;
-            border: 1px solid rgba(184, 149, 107, 0.12);
+            border: 1px solid color-mix(in srgb, var(--bg-accent) 20%, #ffffff 80%);
             border-radius: 1px;
             pointer-events: none;
         }
@@ -328,6 +385,10 @@
             opacity: 0;
             animation: fadeIn 0.9s ease 1s forwards;
         }
+
+        .message p + p {
+            margin-top: 0.65rem;
+        }
         
         .signature {
             text-align: right;
@@ -339,6 +400,58 @@
             border-top: 1px solid rgba(184, 149, 107, 0.25);
             opacity: 0;
             animation: fadeIn 0.8s ease 1.2s forwards;
+        }
+
+        .memory-btn {
+            margin-top: 1rem;
+            padding: 0.55rem 1rem;
+            border: 1px solid color-mix(in srgb, var(--bg-accent) 45%, #ffffff 55%);
+            background: color-mix(in srgb, var(--bg-accent-soft) 35%, #ffffff 65%);
+            color: var(--ink);
+            border-radius: 999px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .memory-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(92, 83, 70, 0.12);
+        }
+
+        .memory-dialog {
+            position: fixed;
+            inset: 0;
+            background: rgba(40, 34, 28, 0.35);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 30;
+            padding: 1rem;
+        }
+
+        .memory-dialog.open {
+            display: flex;
+        }
+
+        .memory-panel {
+            width: min(420px, 94vw);
+            background: #fffaf5;
+            border: 1px solid rgba(184, 149, 107, 0.3);
+            border-radius: 10px;
+            padding: 1rem 1rem 0.9rem;
+        }
+
+        .memory-panel p {
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--ink);
+        }
+
+        .memory-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 0.8rem;
         }
         
         @keyframes fadeIn {
@@ -461,6 +574,10 @@
             .bg-click-hint {
                 bottom: 1rem;
             }
+
+            .bg-hint-text {
+                font-size: 0.72rem;
+            }
         }
         
         @media (max-width: 480px) {
@@ -500,7 +617,7 @@
             }
             
             .signature {
-                font-size: 0.9rem;
+                font-size: 1.02rem;
                 margin-top: 1.5rem;
             }
             
@@ -556,16 +673,18 @@
             <div class="bg-block"></div><div class="bg-block"></div><div class="bg-block"></div>
         </div>
     </div>
-    <div class="bg-click-hint" aria-hidden="true">
-        <span class="bg-dot active" data-dot="0"></span>
-        <span class="bg-dot" data-dot="1"></span>
-        <span class="bg-dot" data-dot="2"></span>
-        <span class="bg-dot" data-dot="3"></span>
+    <div class="bg-click-hint" role="group" aria-label="背景切换按钮组">
+        <span class="bg-hint-text">点击背景切换</span>
+        <span class="bg-dot active" data-dot="0" role="button" tabindex="0" aria-label="切换背景1"></span>
+        <span class="bg-dot" data-dot="1" role="button" tabindex="0" aria-label="切换背景2"></span>
+        <span class="bg-dot" data-dot="2" role="button" tabindex="0" aria-label="切换背景3"></span>
+        <span class="bg-dot" data-dot="3" role="button" tabindex="0" aria-label="切换背景4"></span>
     </div>
     <div class="container">
         <div class="card">
             <div class="title-container">
                 <div class="label">妇女节快乐</div>
+                <div class="label">致梁丽女士</div>
                 <div class="name">梁丽</div>
             </div>
             
@@ -578,29 +697,32 @@
             </div>
             <div class="poem-divider" aria-hidden="true"></div>
             <div class="message">
-                亲爱的妈妈梁丽，今天是属于您的节日。感谢您一直以来的付出和关爱，
-                您的爱是我生命中最温暖的阳光。愿您永远年轻美丽，健康快乐！
-                您是我心中最棒的妈妈，我爱您！
+                <p>亲爱的妈妈梁丽，今天是属于您的节日。</p>
+                <p>感谢您一直以来的付出和关爱，您的爱是我生命中最温暖的阳光。</p>
+                <p>愿您永远年轻美丽，健康快乐，平安顺遂。我爱您。</p>
             </div>
             
             <div class="signature">
                 爱您的儿子 续智博<br>
                 2026年妇女节
             </div>
+            <button class="memory-btn" id="memoryBtn" type="button" aria-label="打开给妈妈的话">
+                给妈妈的话
+            </button>
             
             <div class="floral">
-                <div class="flower" title="点击试试" aria-label="点击试试">
+                <div class="flower" title="点击试试" aria-label="点击试试" tabindex="0" role="button">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="2"/>
                         <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/>
                     </svg>
                 </div>
-                <div class="flower" title="点击试试">
+                <div class="flower" title="点击试试" aria-label="点击试试" tabindex="0" role="button">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="5"/>
                     </svg>
                 </div>
-                <div class="flower" title="点击试试">
+                <div class="flower" title="点击试试" aria-label="点击试试" tabindex="0" role="button">
                     <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="2"/>
                         <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12"/>
@@ -608,6 +730,14 @@
                 </div>
             </div>
             <div class="seal" aria-hidden="true"></div>
+        </div>
+    </div>
+    <div class="memory-dialog" id="memoryDialog" role="dialog" aria-modal="true" aria-label="给妈妈的话">
+        <div class="memory-panel">
+            <p>妈妈，感谢您一直把我放在心上。未来我会更努力，把更多温柔和安心带回家。</p>
+            <div class="memory-actions">
+                <button class="memory-btn" id="memoryCloseBtn" type="button">我知道啦</button>
+            </div>
         </div>
     </div>
     
@@ -639,6 +769,20 @@
                 var dots = document.querySelectorAll('.bg-dot');
                 var container = document.getElementById('bg-slides');
                 var current = 0;
+                var autoTimer = null;
+                var pauseTimer = null;
+                var palettes = [
+                    { accent: '#C3967F', soft: '#E8D8D4' },
+                    { accent: '#B98692', soft: '#EDE0E4' },
+                    { accent: '#C6A273', soft: '#F8ECE0' },
+                    { accent: '#A58FA8', soft: '#E8E0E4' }
+                ];
+                
+                function applyPalette(index) {
+                    var palette = palettes[index] || palettes[0];
+                    document.documentElement.style.setProperty('--bg-accent', palette.accent);
+                    document.documentElement.style.setProperty('--bg-accent-soft', palette.soft);
+                }
                 
                 function goTo(i) {
                     current = (i + 4) % 4;
@@ -647,13 +791,32 @@
                     });
                     dots.forEach(function(d, idx) {
                         d.classList.toggle('active', idx === current);
+                        d.setAttribute('aria-pressed', idx === current ? 'true' : 'false');
                     });
+                    applyPalette(current);
+                }
+
+                function startAuto() {
+                    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                    if (autoTimer) clearInterval(autoTimer);
+                    autoTimer = setInterval(function() {
+                        goTo(current + 1);
+                    }, 7000);
+                }
+
+                function pauseAutoTemporarily() {
+                    if (autoTimer) clearInterval(autoTimer);
+                    if (pauseTimer) clearTimeout(pauseTimer);
+                    pauseTimer = setTimeout(function() {
+                        startAuto();
+                    }, 12000);
                 }
                 
                 if (container) {
                     container.addEventListener('click', function(e) {
                         if (e.target.closest('.card') || e.target.closest('.bg-click-hint')) return;
                         goTo(current + 1);
+                        pauseAutoTemporarily();
                     });
                 }
                 
@@ -661,7 +824,44 @@
                     dot.addEventListener('click', function(e) {
                         e.stopPropagation();
                         goTo(i);
+                        pauseAutoTemporarily();
                     });
+                    dot.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            goTo(i);
+                            pauseAutoTemporarily();
+                        }
+                    });
+                });
+
+                goTo(0);
+                startAuto();
+            }
+
+            function initMemoryDialog() {
+                var openBtn = document.getElementById('memoryBtn');
+                var closeBtn = document.getElementById('memoryCloseBtn');
+                var dialog = document.getElementById('memoryDialog');
+                if (!openBtn || !closeBtn || !dialog) return;
+
+                function openDialog() {
+                    dialog.classList.add('open');
+                    closeBtn.focus();
+                }
+
+                function closeDialog() {
+                    dialog.classList.remove('open');
+                    openBtn.focus();
+                }
+
+                openBtn.addEventListener('click', openDialog);
+                closeBtn.addEventListener('click', closeDialog);
+                dialog.addEventListener('click', function(e) {
+                    if (e.target === dialog) closeDialog();
+                });
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && dialog.classList.contains('open')) closeDialog();
                 });
             }
             
@@ -680,11 +880,18 @@
                         var y = e.clientY != null ? e.clientY : (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientY : window.innerHeight / 2);
                         handleFlowerTap(x, y);
                     });
+                    flower.addEventListener('keydown', function(e) {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleFlowerTap(window.innerWidth / 2, window.innerHeight / 2);
+                        }
+                    });
                     flower.addEventListener('touchend', function(e) {
                         var t = e.changedTouches && e.changedTouches[0];
                         if (t) { e.preventDefault(); handleFlowerTap(t.clientX, t.clientY); }
                     }, { passive: false });
                 });
+                initMemoryDialog();
             });
         })();
     </script>

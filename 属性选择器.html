@@ -19,9 +19,24 @@
     img[alt^="w"]{
         border: 2px solid yellow;
     }
+    img[alt$="w"]{
+        border: 2px solid pink;
+    }
+    img[alt*="o"]{
+        background-color: antiquewhite;
+    }
+    img[alt~="w"]{
+        border: 2px solid purple;
+    }
+    /* 以how-开头 */
+    img[alt|="how"]{
+        border: 2px solid orange;
+    }
 </style>
 <body>
     <img src="img/1.jpg" alt="wow">
     <img src="img/2.jpg" alt="xizi">
+    <img src="img/3.jpg" alt="wow w">
+    <img src="img/4.jpg" alt="how- wow wow">
 </body>
 </html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        a::before{
+            content: "点击";
+            color: red;
+        }
+        a::after{
+            content: "点击";
+            color: red;
+        }
+        .box1{
+            width: 100px;
+            height: 100px;
+            border: 1px solid red;
+        }
+        .box1::selection{
+            background-color: orange;
+            color: white;
+        }
+        .box1::first-letter{
+            font-size: 100px;
+            color: red;
+        }
+        .box1::first-line{
+            font-size: 100px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <a href="https://www.baidu.com">百度</a>
+    <a href="https://www.baidu.com">百度</a>
+    <a href="https://www.baidu.com">百度</a>
+    <a href="https://www.baidu.com">百度</a>
+    <div class="box1">
+        我是圣采儿，我是死神。
+    </div>
+</body>
+</html>
